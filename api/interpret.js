@@ -1,4 +1,3 @@
-// api/interpret.js
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -8,83 +7,76 @@ export default async function handler(req, res) {
   try {
     const { shloka } = req.body || {};
     const text = (shloka || "").toString().trim();
-    if (!text) return res.status(400).json({ error: "Please provide a shloka in the request body." });
 
-    const OPENAI_KEY = process.env.OPENAI_API_KEY;
-    if (!OPENAI_KEY) {
-      console.error("OPENAI_API_KEY not set");
-      return res.status(500).json({ error: "OpenAI API key not configured on the server." });
+    if (!text) {
+      return res.status(400).json({ error: "Please provide a shloka." });
     }
 
-    // Default model; change via environment variable MODEL if you prefer (e.g., 'gpt-4').
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ error: "OpenAI API key is missing on the server." });
+    }
+
     const model = process.env.MODEL || "gpt-3.5-turbo";
 
-    const systemPrompt = `You are an expert Sanskrit scholar and classical commentator. When given a Sanskrit shloka, produce a concise explanation.
-Respond with a JSON object that has these keys: translation, notes, inner_meaning, takeaway.
-If you cannot provide a field, return an empty string for it.
-Do NOT add any extra commentary outside the JSON object.`;
+    const systemPrompt = `You are an expert Sanskrit scholar and spiritual teacher.
+Interpret Sanskrit shlokas clearly and accurately.
+Return ONLY valid JSON with these keys:
+translation, notes, inner_meaning, takeaway.
+Do not include markdown or extra text.`;
 
-    const userPrompt = `Interpret this Sanskrit shloka and return only a JSON object with keys translation, notes, inner_meaning, takeaway.\n\nShloka:\n${text}`;
+    const userPrompt = `Interpret this Sanskrit shloka and return only a valid JSON object with keys translation, notes, inner_meaning, takeaway.
 
-    const payload = {
-      model,
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
-      ],
-      temperature: 0.25,
-      max_tokens: 700
-    };
+Shloka:
+${text}`;
 
-    const openaiResp = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_KEY}`
+        Authorization: `Bearer ${apiKey}`
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ],
+        temperature: 0.3,
+        max_tokens: 700
+      })
     });
 
-    const respText = await openaiResp.text();
+    const rawText = await response.text();
 
-    if (!openaiResp.ok) {
-      console.error("OpenAI error", openaiResp.status, respText);
-      // Return error + raw OpenAI response for debugging
-      return res.status(openaiResp.status).json({ error: "OpenAI API request failed", detail: respText });
+    if (!response.ok) {
+      console.error("OpenAI API error:", rawText);
+      return res.status(response.status).json({
+        error: "OpenAI request failed.",
+        detail: rawText
+      });
     }
 
-    // openai returned ok - parse JSON
-    // Try to parse the response JSON (the fetch text might include JSON inside text)
-    let modelOutput = respText;
+    let parsed = null;
     try {
-      // parse the full response as JSON and pull message content if possible
-      const parsedResp = JSON.parse(respText);
-      modelOutput = parsedResp?.choices?.[0]?.message?.content ?? modelOutput;
-    } catch (e) {
-      // respText might already be the content, continue
-    }
-
-    // Attempt to extract the JSON object from the model output
-    let parsedResult = null;
-    try {
-      const start = modelOutput.indexOf("{");
-      const end = modelOutput.lastIndexOf("}");
-      if (start !== -1 && end !== -1 && end > start) {
-        const candidate = modelOutput.slice(start, end + 1);
-        parsedResult = JSON.parse(candidate);
+      const json = JSON.parse(rawText);
+      const content = json?.choices?.[0]?.message?.content || "";
+      const start = content.indexOf("{");
+      const end = content.lastIndexOf("}");
+      if (start !== -1 && end !== -1) {
+        parsed = JSON.parse(content.slice(start, end + 1));
       }
     } catch (e) {
-      parsedResult = null;
+      parsed = null;
     }
 
-    if (parsedResult && typeof parsedResult === "object") {
-      return res.status(200).json({ result: parsedResult, raw: modelOutput });
+    if (parsed && typeof parsed === "object") {
+      return res.status(200).json({ result: parsed });
     }
 
-    // fallback: return raw model text so front-end can display
-    return res.status(200).json({ text: modelOutput });
-  } catch (err) {
-    console.error("Handler exception:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(200).json({ text: rawText });
+  } catch (error) {
+    console.error("Server error:", error);
+    return res.status(500).json({ error: "Internal server error while interpreting shloka." });
   }
 }
