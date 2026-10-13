@@ -3,28 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sanskrit Shloka Meaning</title>
+    <title>Sanskrit Shloka AI Meaning</title>
     <style>
       :root {
-        --bg-color: #f9f3eb;
-        --card-bg: #ffffff;
-        --primary-color: #c75b20;
-        --text-dark: #2b2b2b;
-        --text-muted: #5e5e5e;
-        --border-color: #eedcc9;
-        --highlight-bg: #fff8f2;
-        --shadow: rgba(0, 0, 0, 0.08);
+        --bg: #f9f3eb;
+        --card: #ffffff;
+        --primary: #c75b20;
+        --text: #2b2b2b;
+        --muted: #5e5e5e;
+        --border: #eedcc9;
+        --soft: #fff8f2;
       }
 
       [data-theme="dark"] {
-        --bg-color: #121212;
-        --card-bg: #1e1e1e;
-        --primary-color: #ff9a57;
-        --text-dark: #f1f1f1;
-        --text-muted: #d1d1d1;
-        --border-color: #3d3d3d;
-        --highlight-bg: #261d19;
-        --shadow: rgba(0, 0, 0, 0.3);
+        --bg: #121212;
+        --card: #1e1e1e;
+        --primary: #ff9a57;
+        --text: #f1f1f1;
+        --muted: #d1d1d1;
+        --border: #3d3d3d;
+        --soft: #261d19;
       }
 
       * { box-sizing: border-box; }
@@ -35,269 +33,216 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: var(--bg-color);
-        color: var(--text-dark);
+        background: var(--bg);
+        color: var(--text);
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        padding: 30px 20px;
-        transition: background 0.3s ease, color 0.3s ease;
+        padding: 24px;
       }
 
       .wrapper {
         width: 100%;
-        max-width: 760px;
+        max-width: 860px;
       }
 
-      .controls {
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      }
+
+      .topbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 12px;
+        gap: 15px;
         margin-bottom: 20px;
-        flex-wrap: wrap;
       }
 
-      .theme-btn, .nav-btn {
-        background: var(--card-bg);
-        color: var(--text-dark);
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        padding: 10px 16px;
-        font-size: 0.95rem;
-        cursor: pointer;
-        transition: 0.2s ease;
-      }
-
-      .theme-btn:hover, .nav-btn:hover {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-      }
-
-      .nav-btns {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-
-      .container {
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
-        border-radius: 18px;
-        padding: 35px 30px;
-        box-shadow: 0 12px 30px var(--shadow);
-      }
-
-      .decorative-icon {
-        text-align: center;
-        font-size: 2.8rem;
-        color: var(--primary-color);
-        margin-bottom: 18px;
-      }
-
-      .shloka {
-        font-size: clamp(1.5rem, 2vw, 2.1rem);
+      .heading {
+        font-size: 1.4rem;
         font-weight: 700;
-        color: var(--primary-color);
-        white-space: pre-line;
-        line-height: 1.9;
-        text-align: center;
-        margin-bottom: 24px;
       }
 
-      .section-title {
-        font-size: 0.8rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: var(--text-muted);
-        margin-top: 26px;
-        margin-bottom: 10px;
-        text-align: center;
-        font-weight: 600;
-      }
-
-      .section-title::after {
-        content: "";
-        display: block;
-        width: 48px;
-        height: 2px;
-        background: var(--primary-color);
-        margin: 8px auto 0;
-        opacity: 0.6;
-      }
-
-      .transliteration {
-        font-size: 1.05rem;
-        color: var(--text-muted);
-        text-align: center;
-        line-height: 1.8;
-        margin-bottom: 10px;
-      }
-
-      .translation {
-        font-size: 1.08rem;
-        font-style: italic;
-        text-align: center;
-        color: var(--text-dark);
-        margin-bottom: 18px;
-        line-height: 1.8;
-      }
-
-      .meaning {
-        background: var(--highlight-bg);
-        border-left: 4px solid var(--primary-color);
-        padding: 18px 20px;
-        border-radius: 8px;
-        text-align: justify;
-        line-height: 1.8;
-        color: var(--text-dark);
-      }
-
-      .source {
-        text-align: center;
-        margin-top: 24px;
+      .subheading {
+        color: var(--muted);
         font-size: 0.92rem;
-        color: var(--text-muted);
+        margin-top: 5px;
       }
 
-      @media (max-width: 500px) {
-        .container {
-          padding: 24px 18px;
-        }
-        .controls {
-          justify-content: center;
-        }
-        .nav-btns {
-          justify-content: center;
-        }
+      .theme-btn {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 10px 14px;
+        cursor: pointer;
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 120px;
+        border: 1px solid var(--border);
+        background: rgba(0,0,0,0.02);
+        border-radius: 12px;
+        padding: 14px 16px;
+        resize: vertical;
+        font-size: 1rem;
+        color: var(--text);
+      }
+
+      .actions {
+        margin-top: 14px;
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      .submit-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 18px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .status {
+        margin-top: 12px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .result-box {
+        margin-top: 22px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--soft);
+        padding: 18px 20px;
+        white-space: pre-wrap;
+        line-height: 1.75;
+        display: none;
+      }
+
+      .result-box.visible {
+        display: block;
+      }
+
+      .label {
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 8px;
       }
     </style>
   </head>
+
   <body>
     <div class="wrapper">
-      <div class="controls">
-        <button class="theme-btn" id="themeToggle">🌓 Toggle Theme</button>
-
-        <div class="nav-btns">
-          <button class="nav-btn" onclick="showShloka(0)">1</button>
-          <button class="nav-btn" onclick="showShloka(1)">2</button>
-          <button class="nav-btn" onclick="showShloka(2)">3</button>
-          <button class="nav-btn" onclick="showShloka(3)">4</button>
-          <button class="nav-btn" onclick="showShloka(4)">5</button>
-          <button class="nav-btn" onclick="showShloka(5)">6</button>
-          <button class="nav-btn" onclick="showShloka(6)">7</button>
-          <button class="nav-btn" onclick="showShloka(7)">8</button>
-          <button class="nav-btn" onclick="showShloka(8)">9</button>
-          <button class="nav-btn" onclick="showShloka(9)">10</button>
+      <div class="card">
+        <div class="topbar">
+          <div>
+            <div class="heading">Sanskrit Shloka AI Meaning</div>
+            <div class="subheading">Paste or type a Sanskrit shloka and press Enter.</div>
+          </div>
+          <button class="theme-btn" id="themeToggle">🌓 Theme</button>
         </div>
-      </div>
 
-      <div class="container">
-        <div class="decorative-icon">ॐ</div>
-        <div class="shloka" id="shlokaText"></div>
+        <form id="form">
+          <textarea id="shlokaInput" placeholder="Type a Sanskrit shloka here..."></textarea>
+          <div class="actions">
+            <button type="submit" class="submit-btn">Interpret Meaning</button>
+          </div>
+        </form>
 
-        <div class="section-title">Transliteration</div>
-        <div class="transliteration" id="transliterationText"></div>
+        <div class="status" id="status">Waiting for your shloka...</div>
 
-        <div class="section-title">Literal Translation</div>
-        <div class="translation" id="translationText"></div>
-
-        <div class="section-title">Deeper Meaning</div>
-        <div class="meaning" id="meaningText"></div>
-
-        <div class="source" id="sourceText"></div>
+        <div id="resultBox" class="result-box" aria-live="polite"></div>
       </div>
     </div>
 
     <script>
-      const shlokas = [
-        {
-          text: `कर्मण्येवाधिकारस्ते मा फलेषु कदाचन |\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ||`,
-          transliteration: `Karmanye vadhikaraste ma phaleshu kadachana |\nMa karma-phala-hetur bhur ma te sango 'stvakarmani ||`,
-          translation: `"You have the right to work, but never to the fruits of work. Do not let your motive be the fruits of action, nor should you be attached to inaction."`,
-          meaning: "This verse from the Bhagavad Gita teaches Karma Yoga. It reminds us to act with responsibility, sincerity, and detachment. True wisdom lies in doing one’s duty without being controlled by outcomes or ego.",
-          source: "Bhagavad Gita, Chapter 2, Verse 47"
-        },
-        {
-          text: `ॐ भूर्भुवः स्वः |\nतत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि |\nधियो यो नः प्रचोदयात् ||`,
-          transliteration: `Om bhur bhuvah svah |\nTat savitur varenyam bhargo devasya dhimahi |\nDhiyo yo nah prachodayat ||`,
-          translation: `"We meditate on the divine light of the Sun, the supreme source of wisdom and life. May it illuminate our intellect and guide us toward truth."`,
-          meaning: "The Gayatri Mantra is a prayer for clarity, wisdom, and inner awakening. It asks for divine illumination to purify the mind and strengthen moral judgment.",
-          source: "Rigveda, Mandala 3, Sukta 62, Verse 10"
-        },
-        {
-          text: `ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम् |\nउर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय माऽमृतात् ||`,
-          transliteration: `Om tryambakam yajamahe sugandhim pushti-vardhanam |\nUrvarukam iva bandhanan mrityor mukshiya mamritat ||`,
-          translation: `"We worship the three-eyed Lord, who nourishes and sustains all beings. May He liberate us from the bondage of death and grant us immortality and peace."`,
-          meaning: "This is the Mahamrityunjaya Mantra, a prayer for protection from fear, suffering, and death. It is not only a plea for survival but for liberation from ignorance, attachment, and mortality.",
-          source: "Rigveda and Yajurveda traditions"
-        },
-        {
-          text: `शरीरं यदवाप्नोति यच्च अप्यधिगच्छति |\nसततं तत्प्रयत्नेन योगेनात्मा समाधिना ||`,
-          transliteration: `Shariram yadavapnoti yatcha apyadhigacchati |\nSatatam tatprayatnena yogena atma samadhina ||`,
-          translation: `"Whatever one gains or achieves in life, one should do so with effort, discipline, and focused inner steadiness."`,
-          meaning: "This verse reflects the importance of inner discipline and consistency. Spiritual progress is not accidental; it comes through sincere practice, humility, and unwavering focus.",
-          source: "General Yoga teachings"
-        },
-        {
-          text: `तमेव शरणं गच्छ सर्वभावेन भारत |\nतत्प्रसादात्परां शान्तिं स्थानं प्राप्स्यसि शाश्वतम् ||`,
-          transliteration: `Tameva sharanam gaccha sarvabhavena bharata |\nTatprasadatparam shantim sthanam prapsyasi shashvatam ||`,
-          translation: `"Take refuge in Him with full surrender, O Bharata. By His grace, you will attain eternal peace and the highest state."`,
-          meaning: "This verse teaches surrender to the divine. When one lets go of ego and trustfully turns to the Supreme, inner peace and liberation naturally follow.",
-          source: "Bhagavad Gita, Chapter 18, Verse 62"
-        },
-        {
-          text: `असतो मा सद्गमय |\nतमसो मा ज्योतिर्गमय |\nमृत्योर्मा अमृतं गमय ||`,
-          transliteration: `Asato ma sad gamaya |\nTamaso ma jyotir gamaya |\nMrityor ma amritam gamaya ||`,
-          translation: `"Lead me from the unreal to the real, from darkness to light, and from death to immortality."`,
-          meaning: "This famous verse from the Brhadaranyaka Upanishad is a prayer for spiritual awakening. It asks for transformation from ignorance to wisdom, fear to courage, and mortality to liberation.",
-          source: "Brihadaranyaka Upanishad"
-        },
-        {
-          text: `सर्वे भवन्तु सुखिनः |\nसर्वे सन्तु निरामयाः |\nसर्वे भद्राणि पश्यन्तु |\nमा कश्चिद्दुःखभाग्भवेत् ||`,
-          transliteration: `Sarve bhavantu sukhinah |\nSarve santu niramayah |\nSarve bhadrani pashyantu |\nMa kashchid dukhabhag bhavet ||`,
-          translation: `"May all beings be happy. May all be free from illness. May all see auspiciousness. May none suffer."`,
-          meaning: "This prayer expresses universal compassion. It is a reminder that true spirituality is not self-centered; it is rooted in love, compassion, and the well-being of all living beings.",
-          source: "Traditional Vedic prayer"
-        },
-        {
-          text: `सत्यमेव जयते |\nनानृतं सत्यमुपासते ||`,
-          transliteration: `Satyameva jayate |\nNanritam satyam upasate ||`,
-          translation: `"Truth alone triumphs; not falsehood. Through truth, one attains the highest reality."`,
-          meaning: "This famous Vedic statement emphasizes that truth is the ultimate power. Honesty, moral courage, and integrity are essential for inner peace and outer growth.",
-          source: "Mundaka Upanishad"
-        },
-        {
-          text: `न त्वहं कामये राज्यं न स्वर्गं नापुनर्भवम् |\nकामीये मह्यं जनार्दन तव कृपया स्वर्गमपि वर्जये ||`,
-          transliteration: `Na tvam kaamayey rajyam na svargam na punarbhavam |\nKaamiye mahyam janardana tava kripayaa svargamapi varjayet ||`,
-          translation: `"I do not desire kingdom, heaven, or even liberation. I only seek Your grace, O Janardana."`,
-          meaning: "This verse reflects pure devotion and selfless surrender. It shows that true bhakti is not bargaining with God for rewards, but offering love and reverence without expectation.",
-          source: "Bhagavata and devotional tradition"
-        },
-        {
-          text: `उद्धरेदात्मनात्मानं नात्मानमवसादयेत् |\nआत्मैव ह्यात्मनो बन्धुरात्मैव रिपुरात्मनः ||`,
-          transliteration: `Uddhared atmanatmanam natmanam avasadayet |\nAtmaiva hyatmano bandhur atmaiva ripur atmanah ||`,
-          translation: `"Elevate yourself through the power of your own mind, and do not degrade yourself. The self is both your friend and your enemy."`,
-          meaning: "This verse shows that the greatest challenge is self-mastery. By discipline and wisdom, one can become one’s own guide and rise above confusion, weakness, and delusion.",
-          source: "Bhagavad Gita, Chapter 6, Verse 5"
-        }
-      ];
+      const form = document.getElementById("form");
+      const textarea = document.getElementById("shlokaInput");
+      const statusEl = document.getElementById("status");
+      const resultBox = document.getElementById("resultBox");
+      const themeToggle = document.getElementById("themeToggle");
 
-      function showShloka(index) {
-        const data = shlokas[index];
-        document.getElementById("shlokaText").innerText = data.text;
-        document.getElementById("transliterationText").innerText = data.transliteration;
-        document.getElementById("translationText").innerText = data.translation;
-        document.getElementById("meaningText").innerText = data.meaning;
-        document.getElementById("sourceText").innerText = data.source;
+      if (!document.documentElement.getAttribute("data-theme")) {
+        document.documentElement.setAttribute("data-theme", "light");
       }
 
-      const themeToggle = document.getElementById("themeToggle");
       themeToggle.addEventListener("click", () => {
-        const currentTheme = document.documentElement.getAttribute("data-theme");
-        const newTheme = currentTheme === "dark" ? "light" : "dark";
-        document.documentElement.setAttribute("data-theme", newTheme);
+        const current = document.documentElement.getAttribute("data-theme");
+        const next = current === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
       });
 
-      showShloka(0);
+      textarea.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          form.requestSubmit();
+        }
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const text = textarea.value.trim();
+
+        if (!text) {
+          statusEl.textContent = "Please enter a shloka first.";
+          return;
+        }
+
+        statusEl.textContent = "AI is reading the shloka...";
+        resultBox.classList.remove("visible");
+        resultBox.textContent = "";
+
+        try {
+          const response = await fetch("/api/interpret", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ shloka: text })
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            statusEl.textContent = data.error || "Something went wrong.";
+            return;
+          }
+
+          let output = "";
+
+          if (data.result) {
+            if (data.result.translation) {
+              output += "Literal Translation:\n" + data.result.translation + "\n\n";
+            }
+            if (data.result.notes) {
+              output += "Context / Notes:\n" + data.result.notes + "\n\n";
+            }
+            if (data.result.inner_meaning) {
+              output += "Inner Meaning:\n" + data.result.inner_meaning + "\n\n";
+            }
+            if (data.result.takeaway) {
+              output += "Practical Takeaway:\n" + data.result.takeaway;
+            }
+          } else if (data.text) {
+            output = data.text;
+          } else {
+            output = JSON.stringify(data, null, 2);
+          }
+
+          resultBox.textContent = output;
+          resultBox.classList.add("visible");
+          statusEl.textContent = "Done.";
+        } catch (error) {
+          console.error(error);
+          statusEl.textContent = "Network error. Please try again.";
+        }
+      });
     </script>
   </body>
 </html>
