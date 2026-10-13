@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sanskrit Shloka & Deeper Meaning</title>
+    <title>Sanskrit Shlokas & Deeper Meanings</title>
     <style>
         :root {
             --bg-color: #fcf8f2;
@@ -12,6 +12,17 @@
             --text-dark: #2c2c2c;
             --text-muted: #5a5a5a;
             --border-color: #f0e2d3;
+            --highlight-bg: #fffbf7;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-color: #ff7b29;
+            --text-dark: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #333333;
+            --highlight-bg: #261c15;
         }
 
         body {
@@ -21,10 +32,41 @@
             margin: 0;
             padding: 40px 20px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            max-width: 650px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .theme-btn, .nav-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .theme-btn:hover, .nav-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .shloka-nav {
+            display: flex;
+            gap: 10px;
         }
 
         .container {
@@ -33,9 +75,10 @@
             background: var(--card-bg);
             padding: 40px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(210, 93, 20, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border-color);
             text-align: center;
+            box-sizing: border-box;
         }
 
         .decorative-icon {
@@ -85,7 +128,7 @@
             font-size: 1.05rem;
             color: var(--text-dark);
             text-align: justify;
-            background-color: #fffbf7;
+            background-color: var(--highlight-bg);
             padding: 20px;
             border-left: 4px solid var(--primary-color);
             border-radius: 4px;
@@ -100,41 +143,80 @@
 </head>
 <body>
 
+    <div class="controls">
+        <button class="theme-btn" id="themeToggle">🌓 Toggle Theme</button>
+        <div class="shloka-nav">
+            <button class="nav-btn" onclick="showShloka(0)">Verse 1</button>
+            <button class="nav-btn" onclick="showShloka(1)">Verse 2</button>
+            <button class="nav-btn" onclick="showShloka(2)">Verse 3</button>
+        </div>
+    </div>
+
     <div class="container">
-        <!-- Decorative Symbol -->
         <div class="decorative-icon">ॐ</div>
 
-        <!-- Sanskrit Shloka (Bhagavad Gita, Chapter 2, Verse 47) -->
-        <div class="shloka">
-            कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।
-            मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ॥
-        </div>
+        <div class="shloka" id="shlokaText"></div>
 
-        <!-- Transliteration -->
         <div class="section-title">Transliteration</div>
-        <p style="font-size: 1.05rem; color: var(--text-muted);">
-            Karmanye vadhikaraste ma phaleshu kadachana |<br>
-            Ma karma-phala-hetur bhur ma te sango ’stvakarmani ||
-        </p>
+        <p id="transliterationText" style="font-size: 1.05rem; color: var(--text-muted);"></p>
 
-        <!-- Literal Translation -->
         <div class="section-title">Literal Translation</div>
-        <div class="translation">
-            "You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions. Never consider yourself to be the cause of the results of your activities, nor be attached to inaction."
-        </div>
+        <div class="translation" id="translationText"></div>
 
-        <!-- Deeper Meaning -->
         <div class="section-title">Deeper Philosophical Meaning</div>
-        <div class="deeper-meaning">
-            This timeless verse outlines the core philosophy of <strong>Karma Yoga</strong> (the path of unselfish action). It teaches us to shift our psychological focus away from anxiety about the future and anchor it entirely in the present moment. 
-            <br><br>
-            When we constantly worry about the outcome ("the fruits"), our energy is divided, which increases stress and hinders performance. The verse provides three crucial life rules: focus completely on your immediate effort, accept that final outcomes are dictated by a vast network of factors beyond your solo control, and never give in to apathy or absolute inaction out of fear of failure. True freedom comes from doing your duty purely for the sake of excellence.
-        </div>
+        <div class="deeper-meaning" id="meaningText"></div>
 
-        <footer>
-            From the Shrimad Bhagavad Gita
-        </footer>
+        <footer id="sourceText"></footer>
     </div>
+
+    <script>
+        const shlokas = [
+            {
+                text: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।\nमा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ॥",
+                transliteration: "Karmanye vadhikaraste ma phaleshu kadachana |\nMa karma-phala-hetur bhur ma te sango ’stvakarmani ||",
+                translation: "\"You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions. Never consider yourself to be the cause of the results of your activities, nor be attached to inaction.\"",
+                meaning: "This timeless verse outlines the core philosophy of Karma Yoga (the path of unselfish action). It teaches us to shift our psychological focus away from anxiety about the future and anchor it entirely in the present moment. When we constantly worry about outcomes, our energy splits, increasing stress. True freedom comes from doing our duty purely for the sake of excellence.",
+                source: "From the Shrimad Bhagavad Gita (Chapter 2, Verse 47)"
+            },
+            {
+                text: "ॐ भूर्भुवः स्वः ।\nतत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि ।\nधियो यो नः प्रचोदयात् ॥",
+                transliteration: "Om bhur bhuvah svah |\nTat savitur varenyam bhargo devasya dhimahi |\nDhiyo yo nah prachodayat ||",
+                translation: "\"We meditate on the glorious splendor of the divine Vivifier (Sun God). May that divine light illuminate and inspire our collective intellect and minds.\"",
+                meaning: "The Gayatri Mantra is an invocation of cosmic intelligence. Instead of asking for physical objects or material success, it asks for the refinement of intellect ('Dhi'). The deeper philosophy teaches us that wisdom is the greatest human wealth. By tuning into the source of all light, we seek clarity of thought to navigate life righteously.",
+                source: "From the Rigveda (Mandala 3, Sukta 62, Verse 10)"
+            },
+            {
+                text: "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम् ।\nउर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात् ॥",
+                transliteration: "Om tryambakam yajamahe sugandhim pushti-vardhanam |\nUrvarukam iva bandhanan mrityor mukshiya mamritat ||",
+                translation: "\"We worship the three-eyed Lord (Shiva), who is fragrant and who nourishes all beings. May He liberate us from death, like a ripe cucumber easily detaching from its vine, and lead us into immortality.\"",
+                meaning: "Known as the Mahamrityunjaya Mantra, this verse is a meditation on conquering fear—specifically the fear of death and decay. The metaphor of the cucumber is deeply philosophical: a cucumber does not fight or scream when it detaches from the vine; it drops naturally when it matures. The mantra asks for spiritual maturity so that we can surrender our attachments smoothly when life transitions.",
+                source: "From the Rigveda & Yajurveda"
+            }
+        ];
+
+        function showShloka(index) {
+            const data = shlokas[index];
+            document.getElementById('shlokaText').innerText = data.text;
+            document.getElementById('transliterationText').innerText = data.transliteration;
+            document.getElementById('translationText').innerText = data.translation;
+            document.getElementById('meaningText').innerHTML = data.meaning;
+            document.getElementById('sourceText').innerText = data.source;
+        }
+
+        // Theme Toggle Setup
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+        });
+
+        // Initialize with first shloka
+        showShloka(0);
+    </script>
+</body>
+</html>
+
 
 </body>
 </html>
