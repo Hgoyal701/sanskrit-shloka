@@ -9,20 +9,24 @@
         --bg: #f9f3eb;
         --card: #ffffff;
         --primary: #c75b20;
-        --text: #2b2b2b;
-        --muted: #5e5e5e;
+        --primary-dark: #a24318;
+        --text: #2d2d2d;
+        --muted: #666666;
         --border: #eedcc9;
         --soft: #fff8f2;
+        --shadow: rgba(0, 0, 0, 0.08);
       }
 
       [data-theme="dark"] {
         --bg: #121212;
         --card: #1e1e1e;
         --primary: #ff9a57;
-        --text: #f1f1f1;
-        --muted: #d1d1d1;
-        --border: #3d3d3d;
+        --primary-dark: #e68240;
+        --text: #f2f2f2;
+        --muted: #d0d0d0;
+        --border: #3a3a3a;
         --soft: #261d19;
+        --shadow: rgba(0, 0, 0, 0.35);
       }
 
       * { box-sizing: border-box; }
@@ -30,143 +34,306 @@
       body {
         margin: 0;
         min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         background: var(--bg);
         color: var(--text);
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        padding: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 28px 16px;
       }
 
-      .wrapper {
+      .app {
         width: 100%;
-        max-width: 860px;
+        max-width: 980px;
       }
 
       .card {
         background: var(--card);
         border: 1px solid var(--border);
-        border-radius: 18px;
+        border-radius: 20px;
+        box-shadow: 0 18px 40px var(--shadow);
         padding: 28px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
       }
 
       .topbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 15px;
+        gap: 16px;
         margin-bottom: 20px;
       }
 
-      .heading {
-        font-size: 1.4rem;
-        font-weight: 700;
+      .title-wrap h1 {
+        margin: 0;
+        font-size: clamp(1.5rem, 3vw, 2.1rem);
+        color: var(--primary);
       }
 
-      .subheading {
+      .title-wrap p {
+        margin: 6px 0 0;
         color: var(--muted);
-        font-size: 0.92rem;
-        margin-top: 5px;
+        font-size: 0.95rem;
       }
 
       .theme-btn {
-        background: transparent;
         border: 1px solid var(--border);
+        background: transparent;
         color: var(--text);
-        border-radius: 10px;
         padding: 10px 14px;
+        border-radius: 10px;
         cursor: pointer;
+        font-weight: 600;
+      }
+
+      .examples {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .example-chip {
+        border: 1px solid var(--border);
+        background: var(--soft);
+        border-radius: 999px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--text);
+      }
+
+      .example-chip:hover {
+        border-color: var(--primary);
+        color: var(--primary);
       }
 
       textarea {
         width: 100%;
-        min-height: 120px;
+        min-height: 150px;
         border: 1px solid var(--border);
+        border-radius: 14px;
         background: rgba(0,0,0,0.02);
-        border-radius: 12px;
-        padding: 14px 16px;
-        resize: vertical;
-        font-size: 1rem;
         color: var(--text);
+        padding: 16px 18px;
+        font-size: 1.03rem;
+        resize: vertical;
       }
 
-      .actions {
-        margin-top: 14px;
+      .controls {
         display: flex;
-        justify-content: flex-start;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 16px;
       }
 
       .submit-btn {
         background: var(--primary);
         color: white;
         border: none;
-        border-radius: 10px;
         padding: 12px 18px;
-        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      .submit-btn:hover {
+        background: var(--primary-dark);
+      }
+
+      .clear-btn {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+        padding: 12px 16px;
+        border-radius: 10px;
         cursor: pointer;
       }
 
       .status {
-        margin-top: 12px;
-        color: var(--muted);
+        margin-top: 14px;
         font-size: 0.92rem;
+        color: var(--muted);
       }
 
-      .result-box {
-        margin-top: 22px;
+      .keyboard {
+        margin-top: 28px;
         border: 1px solid var(--border);
-        border-radius: 12px;
         background: var(--soft);
-        padding: 18px 20px;
+        border-radius: 16px;
+        padding: 14px;
+      }
+
+      .keyboard-header {
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: var(--primary);
+      }
+
+      .key-grid {
+        display: grid;
+        grid-template-columns: repeat(10, minmax(32px, 1fr));
+        gap: 8px;
+      }
+
+      .key {
+        border: 1px solid var(--border);
+        background: var(--card);
+        border-radius: 8px;
+        padding: 10px 8px;
+        text-align: center;
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .key:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      .key.wide {
+        grid-column: span 2;
+      }
+
+      .result {
+        margin-top: 28px;
+        background: var(--soft);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px;
         white-space: pre-wrap;
-        line-height: 1.75;
+        line-height: 1.8;
         display: none;
       }
 
-      .result-box.visible {
+      .result.visible {
         display: block;
       }
 
-      .label {
-        font-weight: 700;
+      .result h3 {
+        margin: 0 0 10px;
         color: var(--primary);
-        margin-bottom: 8px;
+      }
+
+      @media (max-width: 700px) {
+        .card {
+          padding: 20px 16px;
+        }
+
+        .topbar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .key-grid {
+          grid-template-columns: repeat(5, minmax(36px, 1fr));
+        }
       }
     </style>
   </head>
-
   <body>
-    <div class="wrapper">
+    <div class="app">
       <div class="card">
         <div class="topbar">
-          <div>
-            <div class="heading">Sanskrit Shloka AI Meaning</div>
-            <div class="subheading">Paste or type a Sanskrit shloka and press Enter.</div>
+          <div class="title-wrap">
+            <h1>Sanskrit Shloka AI Meaning</h1>
+            <p>Paste a shloka, use the virtual keyboard, and get its deeper meaning.</p>
           </div>
-          <button class="theme-btn" id="themeToggle">🌓 Theme</button>
+
+          <button id="themeToggle" class="theme-btn">🌓 Theme</button>
         </div>
 
-        <form id="form">
-          <textarea id="shlokaInput" placeholder="Type a Sanskrit shloka here..."></textarea>
-          <div class="actions">
+        <div class="examples">
+          <button class="example-chip" data-shloka="कर्मण्येवाधिकारस्ते मा फलेषु कदाचन | मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि ||">Example 1</button>
+          <button class="example-chip" data-shloka="ॐ भूर्भुवः स्वः | तत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि | धियो यो नः प्रचोदयात् ||">Example 2</button>
+          <button class="example-chip" data-shloka="असतो मा सद्गमय | तमसो मा ज्योतिर्गमय | मृत्योर्मा अमृतं गमय ||">Example 3</button>
+          <button class="example-chip" data-shloka="सर्वे भवन्तु सुखिनः | सर्वे सन्तु निरामयाः | सर्वे भद्राणि पश्यन्तु | मा कश्चिद्दुःखभाग्भवेत् ||">Example 4</button>
+        </div>
+
+        <form id="shlokaForm">
+          <textarea id="shlokaInput" placeholder="Type or paste Sanskrit shloka here..."></textarea>
+
+          <div class="controls">
             <button type="submit" class="submit-btn">Interpret Meaning</button>
+            <button type="button" class="clear-btn" id="clearBtn">Clear</button>
           </div>
         </form>
 
-        <div class="status" id="status">Waiting for your shloka...</div>
+        <div id="status" class="status">Waiting for a Sanskrit shloka...</div>
 
-        <div id="resultBox" class="result-box" aria-live="polite"></div>
+        <div class="keyboard">
+          <div class="keyboard-header">Sanskrit Keyboard</div>
+          <div class="key-grid">
+            <button class="key" type="button">अ</button>
+            <button class="key" type="button">आ</button>
+            <button class="key" type="button">इ</button>
+            <button class="key" type="button">ई</button>
+            <button class="key" type="button">उ</button>
+            <button class="key" type="button">ऊ</button>
+            <button class="key" type="button">ऋ</button>
+            <button class="key" type="button">ॠ</button>
+            <button class="key" type="button">ए</button>
+            <button class="key" type="button">ऐ</button>
+
+            <button class="key" type="button">ओ</button>
+            <button class="key" type="button">औ</button>
+            <button class="key" type="button">ं</button>
+            <button class="key" type="button">ः</button>
+            <button class="key" type="button">्</button>
+            <button class="key" type="button">क</button>
+            <button class="key" type="button">ख</button>
+            <button class="key" type="button">ग</button>
+            <button class="key" type="button">घ</button>
+            <button class="key" type="button">ङ</button>
+
+            <button class="key" type="button">च</button>
+            <button class="key" type="button">छ</button>
+            <button class="key" type="button">ज</button>
+            <button class="key" type="button">झ</button>
+            <button class="key" type="button">ञ</button>
+            <button class="key" type="button">ट</button>
+            <button class="key" type="button">ठ</button>
+            <button class="key" type="button">ड</button>
+            <button class="key" type="button">ढ</button>
+            <button class="key" type="button">ण</button>
+
+            <button class="key" type="button">त</button>
+            <button class="key" type="button">थ</button>
+            <button class="key" type="button">द</button>
+            <button class="key" type="button">ध</button>
+            <button class="key" type="button">न</button>
+            <button class="key" type="button">प</button>
+            <button class="key" type="button">फ</button>
+            <button class="key" type="button">ब</button>
+            <button class="key" type="button">भ</button>
+            <button class="key" type="button">म</button>
+
+            <button class="key" type="button">य</button>
+            <button class="key" type="button">र</button>
+            <button class="key" type="button">ल</button>
+            <button class="key" type="button">व</button>
+            <button class="key" type="button">श</button>
+            <button class="key" type="button">ष</button>
+            <button class="key" type="button">स</button>
+            <button class="key" type="button">ह</button>
+            <button class="key wide" type="button">space</button>
+            <button class="key wide" type="button">Backspace</button>
+          </div>
+        </div>
       </div>
+
+      <div id="resultBox" class="result" aria-live="polite"></div>
     </div>
 
     <script>
-      const form = document.getElementById("form");
       const textarea = document.getElementById("shlokaInput");
+      const form = document.getElementById("shlokaForm");
       const statusEl = document.getElementById("status");
       const resultBox = document.getElementById("resultBox");
       const themeToggle = document.getElementById("themeToggle");
+      const clearBtn = document.getElementById("clearBtn");
 
       if (!document.documentElement.getAttribute("data-theme")) {
         document.documentElement.setAttribute("data-theme", "light");
@@ -178,33 +345,66 @@
         document.documentElement.setAttribute("data-theme", next);
       });
 
-      textarea.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" && !event.shiftKey) {
-          event.preventDefault();
-          form.requestSubmit();
-        }
+      document.querySelectorAll(".example-chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          textarea.value = chip.dataset.shloka;
+          textarea.focus();
+        });
+      });
+
+      function insertAtCursor(value) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        textarea.setRangeText(value, start, end, "end");
+        textarea.focus();
+      }
+
+      document.querySelectorAll(".key").forEach((button) => {
+        button.addEventListener("click", () => {
+          const text = button.textContent.trim();
+
+          if (text === "space") {
+            insertAtCursor(" ");
+            return;
+          }
+
+          if (text === "Backspace") {
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            if (start > 0) {
+              textarea.setRangeText("", start - 1, end, "end");
+            }
+            textarea.focus();
+            return;
+          }
+
+          insertAtCursor(text);
+        });
+      });
+
+      clearBtn.addEventListener("click", () => {
+        textarea.value = "";
+        textarea.focus();
       });
 
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
-        const text = textarea.value.trim();
+        const shloka = textarea.value.trim();
 
-        if (!text) {
+        if (!shloka) {
           statusEl.textContent = "Please enter a shloka first.";
           return;
         }
 
-        statusEl.textContent = "AI is reading the shloka...";
+        statusEl.textContent = "AI is interpreting the shloka...";
         resultBox.classList.remove("visible");
-        resultBox.textContent = "";
+        resultBox.innerHTML = "";
 
         try {
           const response = await fetch("/api/interpret", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ shloka: text })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ shloka })
           });
 
           const data = await response.json();
@@ -214,33 +414,33 @@
             return;
           }
 
-          let output = "";
+          let html = "<h3>Meaning</h3>";
 
           if (data.result) {
             if (data.result.translation) {
-              output += "Literal Translation:\n" + data.result.translation + "\n\n";
+              html += "<strong>Literal Translation:</strong><br>" + data.result.translation + "<br><br>";
             }
             if (data.result.notes) {
-              output += "Context / Notes:\n" + data.result.notes + "\n\n";
+              html += "<strong>Context / Notes:</strong><br>" + data.result.notes + "<br><br>";
             }
             if (data.result.inner_meaning) {
-              output += "Inner Meaning:\n" + data.result.inner_meaning + "\n\n";
+              html += "<strong>Inner Meaning:</strong><br>" + data.result.inner_meaning + "<br><br>";
             }
             if (data.result.takeaway) {
-              output += "Practical Takeaway:\n" + data.result.takeaway;
+              html += "<strong>Practical Takeaway:</strong><br>" + data.result.takeaway;
             }
           } else if (data.text) {
-            output = data.text;
+            html += data.text;
           } else {
-            output = JSON.stringify(data, null, 2);
+            html += JSON.stringify(data, null, 2);
           }
 
-          resultBox.textContent = output;
+          resultBox.innerHTML = html;
           resultBox.classList.add("visible");
           statusEl.textContent = "Done.";
         } catch (error) {
           console.error(error);
-          statusEl.textContent = "Network error. Please try again.";
+          statusEl.textContent = "Network/server error. Please try again.";
         }
       });
     </script>
