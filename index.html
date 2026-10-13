@@ -9,7 +9,7 @@
         --bg: #f9f3eb;
         --card: #ffffff;
         --primary: #c75b20;
-        --primary-dark: #a24318;
+        --primary-dark: #a54b1d;
         --text: #2d2d2d;
         --muted: #666666;
         --border: #eedcc9;
@@ -21,11 +21,11 @@
         --bg: #121212;
         --card: #1e1e1e;
         --primary: #ff9a57;
-        --primary-dark: #e68240;
+        --primary-dark: #e78543;
         --text: #f2f2f2;
-        --muted: #d0d0d0;
+        --muted: #d2d2d2;
         --border: #3a3a3a;
-        --soft: #261d19;
+        --soft: #251d19;
         --shadow: rgba(0, 0, 0, 0.35);
       }
 
@@ -233,6 +233,7 @@
       }
     </style>
   </head>
+
   <body>
     <div class="app">
       <div class="card">
@@ -403,7 +404,9 @@
         try {
           const response = await fetch("/api/interpret", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json"
+            },
             body: JSON.stringify({ shloka })
           });
 
